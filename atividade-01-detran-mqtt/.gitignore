@@ -1,0 +1,11 @@
+# Pastas de compilação do Maven
+**/target/
+
+# Configurações do VS Code e IDEs
+.vscode/
+.idea/
+*.iml
+
+# Arquivos de log e temporários
+*.log
+.DS_Store

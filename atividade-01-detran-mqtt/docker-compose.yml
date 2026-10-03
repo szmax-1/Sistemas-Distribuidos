@@ -1,0 +1,25 @@
+services:
+  mqtt-broker:
+    image: eclipse-mosquitto:latest
+    container_name: detran-mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+
+  servico-veiculos:
+    build: ./servico-veiculos
+    container_name: detran-veiculos
+    depends_on:
+      - mqtt-broker
+
+  servico-condutores:
+    build: ./servico-condutores
+    container_name: detran-condutores
+    depends_on:
+      - mqtt-broker
+
+  servico-multas:
+    build: ./servico-multas
+    container_name: detran-multas
+    depends_on:
+      - mqtt-broker
