@@ -26,7 +26,7 @@ Na pasta do projeto, execute o comando abaixo para compilar e iniciar todos os c
 
 ```bash
 docker compose up --build
-
+```
 
 
 ## Alguns exemplos para de testes após iniciar os contêineres
