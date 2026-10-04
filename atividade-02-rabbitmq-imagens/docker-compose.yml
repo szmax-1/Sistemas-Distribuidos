@@ -1,0 +1,88 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-broker
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  servidor-conversao-1:
+    build: .
+    container_name: servidor-conversao-1
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    command: ["com.processamento.imagens.ServidorConversao"]
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  servidor-conversao-2:
+    build: .
+    container_name: servidor-conversao-2
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    command: ["com.processamento.imagens.ServidorConversao"]
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  servidor-armazenamento-1:
+    build: .
+    container_name: servidor-armazenamento-1
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    volumes:
+      - ./servidores/servidor1:/app/servidores/servidor1
+    command: ["com.processamento.imagens.ServidorArmazenamento", "./servidores/servidor1"]
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  servidor-armazenamento-2:
+    build: .
+    container_name: servidor-armazenamento-2
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    volumes:
+      - ./servidores/servidor2:/app/servidores/servidor2
+    command: ["com.processamento.imagens.ServidorArmazenamento", "./servidores/servidor2"]
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  cliente-1:
+    build: .
+    container_name: cliente-1
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    volumes:
+      - ./clientes/cliente1:/app/clientes/cliente1
+    command: ["com.processamento.imagens.ClienteProdutor", "./clientes/cliente1"]
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      servidor-conversao-1:
+        condition: service_started
+      servidor-armazenamento-1:
+        condition: service_started
+  
+  cliente-2:
+    build: .
+    container_name: cliente-2
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    volumes:
+      - ./clientes/cliente2:/app/clientes/cliente2
+    command: ["com.processamento.imagens.ClienteProdutor", "./clientes/cliente2"]
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      servidor-conversao-1:
+        condition: service_started
+      servidor-armazenamento-1:
+        condition: service_started
