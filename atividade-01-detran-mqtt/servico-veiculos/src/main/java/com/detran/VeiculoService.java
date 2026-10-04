@@ -35,7 +35,7 @@ public class VeiculoService {
             client.connect();
             System.out.println("Microsserviço de Veículos ativo!");
 
-            // 1. Emplacar veículo: formato "PLACA;MODELO;VALOR;CPF;ANO"
+            // Emplacar veículo no formato "PLACA;MODELO;VALOR;CPF;ANO"
             client.subscribe("detran/veiculo/emplacar", (topic, msg) -> {
                 String[] dados = new String(msg.getPayload()).split(";");
                 if (dados.length == 5) {
@@ -45,7 +45,7 @@ public class VeiculoService {
                 }
             });
 
-            // 2. Calcular IPVA (2%): formato "PLACA"
+            // Calcular IPVA 
             client.subscribe("detran/veiculo/ipva", (topic, msg) -> {
                 String placa = new String(msg.getPayload());
                 Veiculo v = veiculos.get(placa);
@@ -57,7 +57,7 @@ public class VeiculoService {
                 }
             });
 
-            // 3. Transferir proprietário: formato "PLACA;NOVO_CPF"
+            // Transferir proprietário
             client.subscribe("detran/veiculo/transferir", (topic, msg) -> {
                 String[] dados = new String(msg.getPayload()).split(";");
                 if (dados.length == 2 && veiculos.containsKey(dados[0])) {
@@ -67,7 +67,7 @@ public class VeiculoService {
                 }
             });
 
-            // 4. Listar por ano: formato "ANO"
+            // Listar por ano
             client.subscribe("detran/veiculo/listar_por_ano", (topic, msg) -> {
                 int ano = Integer.parseInt(new String(msg.getPayload()));
                 System.out.println("--- Veículos emplacados no ano " + ano + " ---");
