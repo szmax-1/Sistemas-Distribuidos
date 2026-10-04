@@ -34,7 +34,7 @@ public class MultaService {
             client.connect();
             System.out.println("Microsserviço de Multas ativo!");
 
-            // 1. Lançar multa: formato "ANO;DESCRICAO;PONTUACAO;PLACA;CPF_CONDUTOR"
+            // Lançar multa, o formato é "ANO;DESCRICAO;PONTUACAO;PLACA;CPF_CONDUTOR"
             client.subscribe("detran/multa/lancar", (topic, msg) -> {
                 String[] dados = new String(msg.getPayload()).split(";");
                 if (dados.length == 5) {
@@ -50,7 +50,7 @@ public class MultaService {
                 }
             });
 
-            // 2. Multas cometidas por um veículo num ano: formato "PLACA;ANO"
+            // Multas cometidas por um veículo num ano
             client.subscribe("detran/multa/listar_por_veiculo", (topic, msg) -> {
                 String[] dados = new String(msg.getPayload()).split(";");
                 if (dados.length == 2) {
@@ -63,7 +63,7 @@ public class MultaService {
                 }
             });
 
-            // 3. Multas de um condutor num ano: formato "CPF;ANO"
+            // Multas de um condutor num ano
             client.subscribe("detran/multa/listar_por_condutor", (topic, msg) -> {
                 String[] dados = new String(msg.getPayload()).split(";");
                 if (dados.length == 2) {
@@ -76,7 +76,7 @@ public class MultaService {
                 }
             });
 
-            // 4. Multas lançadas num ano: formato "ANO"
+            // Multas lançadas num ano
             client.subscribe("detran/multa/listar_por_ano", (topic, msg) -> {
                 int ano = Integer.parseInt(new String(msg.getPayload()));
                 System.out.println("--- Todas as multas do ano " + ano + " ---");
@@ -85,7 +85,7 @@ public class MultaService {
                         .forEach(m -> System.out.println("Placa: " + m.placa + " | CPF: " + m.cpfCondutor + " | Descrição: " + m.descricao + " | Pontos: " + m.pontuacao));
             });
 
-            // 5. Ranking dos Top 5 condutores com maiores pontuações
+            // Ranking dos 5 condutores com maiores pontuações
             client.subscribe("detran/multa/top5", (topic, msg) -> {
                 System.out.println("--- Top 5 Condutores com Maior Pontuação ---");
                 Map<String, Integer> pontuacaoPorCondutor = new HashMap<>();
