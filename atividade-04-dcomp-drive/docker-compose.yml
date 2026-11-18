@@ -1,0 +1,114 @@
+services:
+  controller:
+    build: .
+    container_name: dcomp-controller
+    command: ["java", "-cp", "app.jar", "com.dcomp.drive.ControllerServer"]
+    ports:
+      - "7000:7000"
+    environment:
+      PORT: "7000"
+      DATA_DIR: "/data/controller"
+      CONFIG_PATH: "/app/config/drive-config.json"
+      CONTROLLER_URL: "http://controller:7000"
+    volumes:
+      - ./config/drive-config.json:/app/config/drive-config.json
+      - ./workspace:/workspace
+      - ctrl_data:/data/controller
+
+  node1:
+    build: .
+    container_name: dcomp-node1
+    command: ["java", "-cp", "app.jar", "com.dcomp.drive.StorageNodeServer"]
+    depends_on:
+      - controller
+    environment:
+      NODE_ID: "node1"
+      NODE_HOST: "maquina-1"
+      PORT: "7001"
+      NODE_ADDRESS: "http://node1:7001"
+      CONTROLLER_URL: "http://controller:7000"
+      DISKS: "disk1:/data/disk1,disk2:/data/disk2"
+      SIMULATED_DISK_CAPACITY_MB: "2048"
+    volumes:
+      - ./config/drive-config.json:/app/config/drive-config.json
+      - node1_data:/data
+
+  node2:
+    build: .
+    container_name: dcomp-node2
+    command: ["java", "-cp", "app.jar", "com.dcomp.drive.StorageNodeServer"]
+    depends_on:
+      - controller
+    environment:
+      NODE_ID: "node2"
+      NODE_HOST: "maquina-2"
+      PORT: "7002"
+      NODE_ADDRESS: "http://node2:7002"
+      CONTROLLER_URL: "http://controller:7000"
+      DISKS: "disk1:/data/disk1"
+      SIMULATED_DISK_CAPACITY_MB: "2048"
+    volumes:
+      - ./config/drive-config.json:/app/config/drive-config.json
+      - node2_data:/data
+
+  node3:
+    build: .
+    container_name: dcomp-node3
+    command: ["java", "-cp", "app.jar", "com.dcomp.drive.StorageNodeServer"]
+    depends_on:
+      - controller
+    environment:
+      NODE_ID: "node3"
+      NODE_HOST: "maquina-3"
+      PORT: "7003"
+      NODE_ADDRESS: "http://node3:7003"
+      CONTROLLER_URL: "http://controller:7000"
+      DISKS: "disk1:/data/disk1"
+      SIMULATED_DISK_CAPACITY_MB: "2048"
+    volumes:
+      - ./config/drive-config.json:/app/config/drive-config.json
+      - node3_data:/data
+
+  node4:
+    build: .
+    container_name: dcomp-node4
+    command: ["java", "-cp", "app.jar", "com.dcomp.drive.StorageNodeServer"]
+    depends_on:
+      - controller
+    environment:
+      NODE_ID: "node4"
+      NODE_HOST: "maquina-4"
+      PORT: "7004"
+      NODE_ADDRESS: "http://node4:7004"
+      CONTROLLER_URL: "http://controller:7000"
+      DISKS: "disk1:/data/disk1,disk2:/data/disk2"
+      SIMULATED_DISK_CAPACITY_MB: "2048"
+    volumes:
+      - ./config/drive-config.json:/app/config/drive-config.json
+      - node4_data:/data
+
+  node5:
+    build: .
+    container_name: dcomp-node5
+    command: ["java", "-cp", "app.jar", "com.dcomp.drive.StorageNodeServer"]
+    depends_on:
+      - controller
+    environment:
+      NODE_ID: "node5"
+      NODE_HOST: "maquina-5"
+      PORT: "7005"
+      NODE_ADDRESS: "http://node5:7005"
+      CONTROLLER_URL: "http://controller:7000"
+      DISKS: "disk1:/data/disk1"
+      SIMULATED_DISK_CAPACITY_MB: "2048"
+    volumes:
+      - ./config/drive-config.json:/app/config/drive-config.json
+      - node5_data:/data
+
+volumes:
+  ctrl_data:
+  node1_data:
+  node2_data:
+  node3_data:
+  node4_data:
+  node5_data:

@@ -1,0 +1,13 @@
+{
+  "replicationFactor": 3,
+  "writeQuorum": 2,
+  "blockSizeBytes": 4194304,
+  "heartbeatIntervalMs": 3000,
+  "heartbeatTimeoutMs": 9000,
+  "scrubbingIntervalMs": 15000,
+  "maxDiskUsagePercent": 90.0,
+  "encryptionEnabled": false,
+  "encryptionKeyBase64": "MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=",
+  "allowUnderReplicatedWrite": true,
+  "maxConcurrentReplications": 2
+}
