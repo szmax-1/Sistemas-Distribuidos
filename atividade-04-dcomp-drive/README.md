@@ -85,3 +85,9 @@ docker compose exec controller java -cp app.jar com.dcomp.drive.DriveCli status
 docker compose restart controller
 docker compose exec controller java -cp app.jar com.dcomp.drive.DriveCli ls /docs
 ```
+
+## Vídeo de Demonstração
+
+A demonstração prática do cluster em execução (descoberta de nós, gravação com replicação $N=3$, leitura com verificação SHA-256, tolerância a falhas e detecção de corrupção) está disponível no Google Drive:
+
+- [Assistir à Demonstração Prática (Google Drive)](https://drive.google.com/file/d/1L4sWDF_R8jaqSHfOBEwvEr3mklsMkQjI/view?usp=sharing)
